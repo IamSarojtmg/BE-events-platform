@@ -1,33 +1,66 @@
-import express from 'express'
-import cors from 'cors'
-import 'dotenv/config'
-import {MongoClient} from 'mongodb'
+import express from 'express';
+import cors from 'cors';
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import Event from './events.model.js';
 
-const URI = process.env.MONGO_URI
-const client = new MongoClient(URI)
-const database = client.db('game-store')
-const games = database.collection('games')
+const URI = process.env.MONGO_URI;
+const PORT = process.env.PORT;
 
-const PORT = process.env.PORT
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-client.connect()
-console.log('mongodb connected');
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.listen(PORT, () => console.log('API running on port', PORT));
+
+app.get('/events', async (req, res) => {
+    try {
+        const events = await Event.find(); // Fetch all events
+        res.status(200).json({ events }); // Send events as response
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: "Internal server error" }); // Send error response
+    }
+});
+
+app.post('/events', async (req, res) => {
+    try {
+        const event = await Event.create(req.body);
+        res.status(200).json(event); // Send created event as response
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message }); // Send error response
+    }
+});
 
 
-const app = express()
-app.use(cors())
-app.use(express.json())
 
 
-app.listen(PORT,()=> console.log('api running')
-)
 
-app.get('/', async(req,res)=>{
-    const allGames = await games.find().toArray()
-    res.json(allGames)
-})
 
-app.post('/games',async(req,res)=>{
-    await games.insertOne({name:'god of war', favourite:true})
-    res.json('added')
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const client = new MongoClient(URI)
+// const database = client.db('game-store')
+// const games = database.collection('games')
+// client.connect()
+// console.log('mongodb connected');
