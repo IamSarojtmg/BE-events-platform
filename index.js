@@ -49,7 +49,7 @@ app.delete('/events/:id', async(req, res)=>{
     try{
         const {id} = req.params
         const event = await Event.findByIdAndDelete(id)
-        if (!product) {
+        if (!event) {
             return res.status(404).json({message: `${id} not found`})
         }
         res.status(200).json({message: `product with ${id} deleted`})
