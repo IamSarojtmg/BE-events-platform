@@ -18,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 app.listen(PORT, () => console.log("API running on port", PORT));
 
 app.get("/", async (req, res) => {
@@ -39,6 +40,7 @@ app.get("/events", async (req, res) => {
 });
 
 app.post("/events", async (req, res) => {
+console.log(req.body);
 
 
   try {

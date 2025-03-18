@@ -29,9 +29,14 @@ const eventSchema = mongoose.Schema(
     tags: {
       type: String,
       required: true,
-      trim: true, // Removes leading/trailing spaces
+      trim: true,
     },
-    
+
+    urlFromChild: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,
