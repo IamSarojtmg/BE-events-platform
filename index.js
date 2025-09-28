@@ -18,7 +18,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 app.listen(PORT, () => console.log("API running on port", PORT));
 
 app.get("/", async (req, res) => {
@@ -39,24 +38,19 @@ app.get("/events", async (req, res) => {
   }
 });
 
-app.get("/events/:tags", async(req, res)=>{
+app.get("/events/:tags", async (req, res) => {
   try {
-const {tags} = req.params
-console.log(tags, 'tags<----------');
-const Events = await Event.find({tags: tags})
-console.log(Events,`${tags} events<------------`);
-
-res.json({Events})
-   
+    const { tags } = req.params;
+    const Events = await Event.find({ tags: tags });
+    res.json({ Events });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "failed to fetch music events" });
+    res.status(500).json({ message: "failed to fetch events" });
   }
-})
+});
 
 app.post("/events", async (req, res) => {
-console.log(req.body);
-
+  console.log(req.body);
 
   try {
     const event = await Event.create(req.body);
